@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - my-network
+
+  angular-app:
+    build: ./angular-app
+    container_name: angular
+    restart: always
+    networks:
+      - my-network
+
+  react-app:
+    build: ./react-app
+    container_name: react
+    restart: always
+    networks:
+      - my-network
+
+  next-app:
+    build: ./next-app
+    container_name: next
+    restart: always
+    networks:
+      - my-network
+
+  vue-app:
+    build: ./vue-app
+    container_name: vue
+    restart: always
+    networks:
+      - my-network
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    command: -H unix:///var/run/docker.sock
+
+networks:
+  my-network:
+
+volumes:
+  portainer_data:
